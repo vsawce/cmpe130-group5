@@ -23,11 +23,18 @@ def string_process(input):
         for i in range(7):
             output_bytes += bytes.fromhex('00')
         output_bytes += bytes.fromhex('{:x}'.format((length_of_input*8)))
+
         print("Input Bytes = ")
         print(input_bytes.hex())
         print("Output Bytes = ")
         print (output_bytes.hex())
 
-input_string = "hello"
-print("Input_String = " + input_string + "\n")
-string_process("hello")
+def md5_process():
+    print(" \n")
+
+def main():
+    input_string = "hello"
+    print("Input_String = " + input_string + "\n")
+    string_process(input_string)
+
+main()
