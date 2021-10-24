@@ -10,14 +10,14 @@ def md5_time(input):
     output = hashlib.md5(input.encode('utf-8'))
     end_time = datetime.now()
     print('MD5: ' + output.hexdigest())
-    return round((end_time - start_time).total_seconds() * 1000000)
+    return round((end_time - start_time).total_seconds() * 1000000000)
 
 def sha3_256_time(input):
     start_time = datetime.now()
     output = hashlib.sha3_256(input.encode('utf-8'))
     end_time = datetime.now()
     print('SHA256: ' + output.hexdigest())
-    return round((end_time - start_time).total_seconds() * 1000000)
+    return round((end_time - start_time).total_seconds() * 1000000000)
 
 def rand_string(n):
     characters = string.ascii_letters + string.digits
@@ -51,7 +51,7 @@ plt.plot(string_sizes, md5_times, label = "MD5")
 plt.plot(string_sizes, sha3_256_times, label = "SHA256")
 
 plt.xlabel("String size (characters * 10^7)")
-plt.ylabel("Time to run (microseconds)")
+plt.ylabel("Time to run (nanoseconds * 10^8)")
 plt.title("Run time analysis: MD5 vs SHA256")
 
 plt.legend()
