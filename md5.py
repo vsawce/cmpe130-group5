@@ -35,7 +35,7 @@ class md5:
     def string_process(self, input):
             input_bytes  = bytes(input, 'utf-8')
             length_of_input = len(input_bytes) #LENGTH in BYTES NOT BITS
-            print (length_of_input)
+            #print (length_of_input)
 
             length_of_padded_bits = 0
             c = 0
@@ -47,21 +47,21 @@ class md5:
                 while(((length_of_input * 8)+c) % 512 != 448):
                     c += 1
                 length_of_padded_bits = c/8
-            print(length_of_padded_bits)
+            #print(length_of_padded_bits)
 
             output_bytes = input_bytes + bytes.fromhex('80') #ADD 1 and 7 zeros
             for i in range(int(length_of_padded_bits) - 1):
                 output_bytes += bytes.fromhex('00')
 
             bits_length = len(((length_of_input*8).to_bytes(2, byteorder='big')))
-            print(bits_length)
+            #print(bits_length)
             for i in range((8-bits_length)):
                 output_bytes += bytes.fromhex('00')
             output_bytes += ((length_of_input*8).to_bytes(2, byteorder='big'))
 
             self.processed_byte = output_bytes
             self.length_processed_bytes = len(output_bytes)
-            print(self.length_processed_bytes)
+            #print(self.length_processed_bytes)
             print("Input Bytes = ")
             print(input_bytes.hex())
             print("Output Bytes = ")
@@ -94,22 +94,27 @@ class md5:
                     g = ((7*i) % 16)
                 #print(m[g].hex())
                 #print(int.from_bytes(m[g], byteorder='big'))
-                f = f + a + (self.k[i]) + (int((m[g]),16))
+                f = (f + a + (self.k[i]) + (int((m[g]),16))) % (2**32)
                 #f = f + a + (self.k[i]) + (int.from_bytes(m[g], byteorder='big'))
                 a = d
                 d = c
                 c = b
-                b = (b + left_rotate(f, self.s[i]))
-            self.a0 = (self.a0 + a)
-            self.b0 = (self.b0 + b)
-            self.c0 = (self.c0 + c)
-            self.d0 = (self.d0 + d)
-        print(self.a0)
-        self.digest += (self.a0).to_bytes(2, byteorder='little')
-        self.digest += (self.b0).to_bytes(2, byteorder='little')
-        self.digest += (self.c0).to_bytes(2, byteorder='little')
-        self.digest += (self.d0).to_bytes(2, byteorder='little')
-        print(self.digest.hex())
+                b = (b + left_rotate(f, self.s[i])) % (2**32)
+            self.a0 = (self.a0 + a) % (2**32)
+            self.b0 = (self.b0 + b) % (2**32)
+            self.c0 = (self.c0 + c) % (2**32)
+            self.d0 = (self.d0 + d) % (2**32)
+        print((self.a0).bit_length())
+        self.digest = self.a0
+        self.digest = (self.digest << ((self.b0).bit_length())) | self.b0
+        self.digest = (self.digest << ((self.c0).bit_length())) | self.c0
+        self.digest = (self.digest << ((self.d0).bit_length())) | self.d0
+
+        #self.digest += (self.a0).to_bytes(2, byteorder='little')
+        #self.digest += (self.b0).to_bytes(2, byteorder='little')
+        #self.digest += (self.c0).to_bytes(2, byteorder='little')
+        #self.digest += (self.d0).to_bytes(2, byteorder='little')
+        print(hex(self.digest))
 
 
 
@@ -142,7 +147,6 @@ def main():
     #bits = 1024
     #p = bits.to_bytes(2, byteorder='big')
     #print(p.hex())
-
 
 
 main()
