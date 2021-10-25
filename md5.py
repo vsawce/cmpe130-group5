@@ -46,7 +46,7 @@ class md5:
             else:
                 while(((length_of_input * 8)+c) % 512 != 448):
                     c += 1
-                length_of_padded_bits = c/8
+                length_of_padded_bits = c/8 #LENGTH IN BYTES
             #print(length_of_padded_bits)
 
             output_bytes = input_bytes + bytes.fromhex('80') #ADD 1 and 7 zeros
@@ -105,10 +105,12 @@ class md5:
             self.c0 = (self.c0 + c) % (2**32)
             self.d0 = (self.d0 + d) % (2**32)
         print((self.a0).bit_length())
+        print(hex(self.b0))
+        print(hex(self.c0))
         self.digest = self.a0
-        self.digest = (self.digest << ((self.b0).bit_length())) | self.b0
-        self.digest = (self.digest << ((self.c0).bit_length())) | self.c0
-        self.digest = (self.digest << ((self.d0).bit_length())) | self.d0
+        self.digest = (self.digest << 32) | self.b0
+        self.digest = (self.digest << 32) | self.c0
+        self.digest = (self.digest << 32) | self.d0
 
         #self.digest += (self.a0).to_bytes(2, byteorder='little')
         #self.digest += (self.b0).to_bytes(2, byteorder='little')
