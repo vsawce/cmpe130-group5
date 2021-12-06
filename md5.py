@@ -85,4 +85,3 @@ def main():
     print(md5_to_hex(md5(str)))
 
 main()
-
