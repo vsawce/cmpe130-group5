@@ -4,12 +4,20 @@ import hashlib
 import string
 import random
 import matplotlib.pyplot as plt
+import md5
 
 def md5_time(input):
     start_time = datetime.now()
     output = hashlib.md5(input.encode('utf-8'))
     end_time = datetime.now()
     print('MD5: ' + output.hexdigest())
+    return round((end_time - start_time).total_seconds() * 1000000000)
+
+def implemented_md5_time(input):
+    start_time = datetime.now()
+    output = md5.md5(input)
+    end_time = datetime.now()
+    print('Implemented MD5: ' + md5.md5_to_hex(output))
     return round((end_time - start_time).total_seconds() * 1000000000)
 
 def sha3_256_time(input):
@@ -30,6 +38,7 @@ strings = []
 
 md5_times = []
 sha3_256_times = []
+implemented_md5_times = []
 
 for size in string_sizes:
     str = rand_string(size)
@@ -40,18 +49,22 @@ for i in range(len(string_sizes)):
     str = strings[i]
     md5_times.append(md5_time(str))
     sha3_256_times.append(sha3_256_time(str))
+    implemented_md5_times.append(implemented_md5_time(str))
     print(f'Length {string_sizes[i]} finished')
 
 print("MD5 times: ", end = '')
 print(md5_times)
 print("SHA256 times: ", end = '')
 print(sha3_256_times)
+print("Implemented MD5 times: ", end = '')
+print(implemented_md5_times)
 
 plt.plot(string_sizes, md5_times, label = "MD5")
 plt.plot(string_sizes, sha3_256_times, label = "SHA256")
+plt.plot(string_sizes, implemented_md5_times, label = "Implmented MD5")
 
 plt.xlabel("String size (characters * 10^7)")
-plt.ylabel("Time to run (nanoseconds * 10^8)")
+plt.ylabel("Time to run (nanoseconds * 10^10)")
 plt.title("Run time analysis: MD5 vs SHA256")
 
 plt.legend()
