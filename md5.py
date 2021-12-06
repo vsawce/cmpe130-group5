@@ -80,8 +80,8 @@ def md5_to_hex(digest):
     raw = digest.to_bytes(16, byteorder='little')
     return '{:032x}'.format(int.from_bytes(raw, byteorder='big'))
 
-# def main():
-#     str = "Lrem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
-#     print(md5_to_hex(md5(str)))
+def main():
+    str = "Lrem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+    print(md5_to_hex(md5(str)))
 
-# main()
+main()
